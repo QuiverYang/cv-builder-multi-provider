@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Resume</title>
+<style>
+  :root {
+    --fg: #1c1008;
+    --muted: #5c4a32;
+    --accent: #8b2222;
+    --line: #c8b89a;
+    --bg: #fffdf8;
+    --sidebar-width: 0px;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    background: var(--bg);
+    color: var(--fg);
+  }
+  body {
+    font-family: "Source Serif 4", "Georgia", "Times New Roman",
+                 "Songti SC", "SimSun", "Noto Serif CJK TC",
+                 "PingFang TC", serif;
+    font-size: 13.5px;
+    line-height: 1.65;
+    margin: 0;
+    padding: 56px 64px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
+
+  /* ── Header ── */
+  header.masthead {
+    border-bottom: 2px solid var(--fg);
+    padding-bottom: 20px;
+    margin-bottom: 28px;
+  }
+  h1.name {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    margin: 0 0 5px;
+    color: var(--fg);
+  }
+  .headline {
+    font-style: italic;
+    color: var(--muted);
+    font-size: 14px;
+    margin: 0 0 8px;
+  }
+  .contact {
+    font-size: 12px;
+    color: var(--muted);
+    margin: 0;
+    letter-spacing: 0.01em;
+  }
+  .contact a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .contact a:hover { text-decoration: underline; }
+
+  /* ── Sections ── */
+  section.sec {
+    margin: 0 0 26px;
+  }
+  section.sec h2 {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: var(--accent);
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 4px;
+    margin: 0 0 14px;
+    font-weight: 700;
+    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue",
+                 "PingFang TC", "Microsoft JhengHei", sans-serif;
+  }
+
+  /* ── Experience ── */
+  .exp {
+    margin: 0 0 20px;
+    padding-left: 16px;
+    border-left: 2px solid var(--line);
+  }
+  .exp-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 10px;
+    margin-bottom: 5px;
+  }
+  .exp-title {
+    font-weight: 700;
+    font-size: 14px;
+  }
+  .exp-sep { color: var(--line); }
+  .exp-company {
+    font-style: italic;
+    color: var(--muted);
+  }
+  .exp-date {
+    margin-left: auto;
+    color: var(--muted);
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+  .loc {
+    color: var(--muted);
+    font-size: 12px;
+  }
+  ul.bullets {
+    margin: 5px 0 0 0;
+    padding-left: 18px;
+  }
+  ul.bullets li {
+    margin: 3px 0;
+    font-size: 13px;
+  }
+  ul.bullets li::marker { color: var(--muted); }
+
+  /* ── Education ── */
+  .edu {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 4px 10px;
+    margin: 0 0 8px;
+  }
+  .edu-school { font-weight: 700; }
+  .edu-degree {
+    font-style: italic;
+    color: var(--muted);
+  }
+  .edu-date {
+    margin-left: auto;
+    color: var(--muted);
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+
+  /* ── Skills (inline tag list) ── */
+  .skills-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+  .skill {
+    border: 1px solid var(--line);
+    background: transparent;
+    padding: 2px 9px;
+    border-radius: 2px;
+    font-size: 12px;
+    color: var(--muted);
+    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue",
+                 "PingFang TC", sans-serif;
+  }
+
+  /* ── Lists (languages, certs) ── */
+  ul {
+    margin: 0;
+    padding-left: 18px;
+  }
+  ul li { margin: 3px 0; font-size: 13px; }
+  ul li::marker { color: var(--accent); }
+
+  /* ── Summary ── */
+  .sec-summary p {
+    margin: 0;
+    font-size: 13.5px;
+    line-height: 1.7;
+    text-align: justify;
+    hyphens: auto;
+  }
+
+  @media print {
+    body {
+      padding: 18mm 20mm;
+      font-size: 11pt;
+      max-width: unset;
+    }
+    section.sec { break-inside: avoid; }
+    .exp { break-inside: avoid; }
+    .edu { break-inside: avoid; }
+    a { color: var(--fg) !important; }
+  }
+
+  @media (max-width: 600px) {
+    body { padding: 28px 20px; }
+    .exp-date, .edu-date { margin-left: 0; }
+  }
+</style>
+</head>
+<body>
+{{TODOS}}
+<header class="masthead">
+{{HEADER}}
+</header>
+<main>
+{{SECTIONS}}
+</main>
+</body>
+</html>

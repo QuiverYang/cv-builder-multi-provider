@@ -1,0 +1,39 @@
+{
+  "name": "林小華",
+  "headline": "工程師",
+  "summary": null,
+  "contact": {
+    "email": null,
+    "phone": null,
+    "location": null,
+    "links": []
+  },
+  "experiences": [
+    {
+      "company": null,
+      "title": "小華工作室 (2023",
+      "start": "2023",
+      "end": null,
+      "bullets": [
+        "寫程式"
+      ],
+      "location": null
+    }
+  ],
+  "education": [
+    {
+      "school": "某大學",
+      "degree": null,
+      "field": null,
+      "start": null,
+      "end": null
+    }
+  ],
+  "skills": [
+    "Python"
+  ],
+  "languages": [],
+  "certifications": [],
+  "_source": "text-paste",
+  "_missing": []
+}

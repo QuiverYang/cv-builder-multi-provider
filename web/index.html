@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CV Builder — AI 履歷產生器</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<!-- Provider Onboarding Modal (2-step) -->
+<div id="byok-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="byok-title" hidden>
+  <div class="modal-box">
+    <!-- Step 1: Provider selection -->
+    <div id="step-1">
+      <h2 id="byok-title">選擇 AI 提供者</h2>
+      <p class="step-hint">選擇你擁有 API key 的提供者，下一步貼上對應的 key。</p>
+
+      <div class="provider-list" role="radiogroup" aria-label="AI 提供者">
+
+        <label class="provider-option" id="opt-anthropic">
+          <input type="radio" name="provider" value="anthropic">
+          <span class="provider-label">Anthropic</span>
+          <span class="provider-format">sk-ant-...</span>
+        </label>
+
+        <label class="provider-option" id="opt-openai">
+          <input type="radio" name="provider" value="openai">
+          <span class="provider-label">OpenAI</span>
+          <span class="provider-format">sk-...</span>
+        </label>
+
+        <label class="provider-option" id="opt-gemini">
+          <input type="radio" name="provider" value="gemini">
+          <span class="provider-label">Google Gemini</span>
+          <span class="provider-format">AIza...</span>
+          <span class="free-badge">免費額度可用</span>
+        </label>
+
+        <label class="provider-option" id="opt-github">
+          <input type="radio" name="provider" value="github">
+          <span class="provider-label">GitHub Models</span>
+          <span class="provider-format">ghp_... 或 github_pat_...</span>
+          <span class="free-badge">免費額度可用</span>
+        </label>
+
+      </div>
+
+      <!-- GitHub Models ≠ Copilot disclaimer — always visible -->
+      <div class="github-disclaimer">
+        <strong>GitHub Models（不是 GitHub Copilot）</strong> — 使用 GitHub Personal Access Token，需要
+        <code>models:read</code> 權限。前往
+        <a href="https://github.com/settings/tokens" target="_blank" rel="noopener">GitHub Token 設定 ↗</a>
+      </div>
+
+      <div class="step-actions">
+        <button id="step1-next" disabled>下一步 →</button>
+      </div>
+    </div>
+
+    <!-- Step 2: Key input -->
+    <div id="step-2" hidden>
+      <h2 id="step2-title">貼上 API Key</h2>
+
+      <input id="byok-input" type="password" placeholder="sk-ant-..." autocomplete="off" spellcheck="false" aria-label="API Key">
+
+      <p class="key-helper" id="key-helper-text">
+        前往
+        <a id="key-link" href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">Anthropic Console ↗</a>
+        取得 API Key
+      </p>
+
+      <p class="trust-line">金鑰僅儲存於本機瀏覽器 (localStorage)，不會送到我們伺服器之外的地方。</p>
+
+      <div class="step-actions">
+        <button id="step2-back">← 返回</button>
+        <button id="byok-confirm" disabled>開始使用</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Migration toast -->
+<div id="migration-toast" class="toast" hidden aria-live="polite">
+  已自動沿用你之前的 Anthropic 設定，可隨時於右上角「切換提供者」更換。
+  <button class="toast-close" onclick="document.getElementById('migration-toast').hidden=true">✕</button>
+</div>
+
+<!-- App Shell -->
+<div id="app">
+  <!-- Header -->
+  <header id="topbar">
+    <span class="app-title">CV Builder</span>
+    <div class="header-actions">
+      <button id="theme-toggle" title="切換深色 / 淺色主題" aria-label="切換主題">&#x25D1;</button>
+      <button id="change-provider" title="切換 AI 提供者">切換提供者</button>
+    </div>
+  </header>
+
+  <!-- Main layout -->
+  <div id="main-layout">
+    <!-- Left: Chat -->
+    <div id="chat-panel">
+      <div id="chat-log" aria-live="polite" aria-label="對話紀錄"></div>
+      <div id="input-area">
+        <textarea id="chat-input" rows="3" placeholder="貼上 LinkedIn / 104 連結、HTML 原始碼、純文字，或輸入問題…" aria-label="輸入訊息"></textarea>
+        <button id="send-btn" aria-label="送出">送出</button>
+      </div>
+      <div id="status-bar">
+        <span id="status-text"></span>
+      </div>
+    </div>
+
+    <!-- Right: Preview -->
+    <div id="preview-panel">
+      <div id="template-gallery" hidden>
+        <p class="gallery-label">選擇樣板：</p>
+        <div id="template-list"></div>
+      </div>
+      <div id="preview-area">
+        <div id="preview-placeholder">
+          <p>Q&A 完成後，這裡會顯示您的履歷預覽。</p>
+        </div>
+        <iframe id="preview-frame" title="履歷預覽" hidden></iframe>
+      </div>
+      <div id="download-area" hidden>
+        <button id="download-btn">⬇ 下載 HTML</button>
+        <span id="privacy-notice" class="privacy-banner" hidden></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Storage blocked banner -->
+  <div id="storage-banner" class="banner" hidden>
+    <span>本機儲存空間不足，本次設定不會被記住。</span>
+  </div>
+  <!-- Multi-tab banner -->
+  <div id="multitab-banner" hidden>
+    <span>另一分頁已修改狀態，已重新載入。</span>
+    <button onclick="document.getElementById('multitab-banner').hidden=true">關閉</button>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

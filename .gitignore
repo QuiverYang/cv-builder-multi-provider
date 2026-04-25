@@ -1,0 +1,4 @@
+node_modules/
+tmp-renders/
+*.log
+.env

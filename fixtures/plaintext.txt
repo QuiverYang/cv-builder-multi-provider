@@ -1,0 +1,36 @@
+王大明
+資深前端工程師 / React 專長 / 金融業 8 年
+someone@example.com | +886-912-345-678 | Taipei, Taiwan
+https://github.com/example
+
+Summary
+專注在大型金融系統前端架構的資深工程師，擅長 React、TypeScript、效能優化。
+曾帶過 6 人團隊，從 0 到 1 規劃過三套內部 design system。
+
+Experience
+資深前端工程師 @ 玉山金控 (2022-03 – present)
+- 主導 Next.js 重構，首頁 LCP 從 4.2s 降到 1.1s，轉換率提升 18%
+- 建立內部 design system，覆蓋 12 個產品線、200+ components
+- 帶領 6 人前端團隊，推行 code review 與 RFC 流程
+
+前端工程師 @ 國泰金控 (2019-06 – 2022-02)
+- 負責網銀 2.0 改版前端，日活用戶 50 萬
+- 導入 monorepo（pnpm + turborepo），build time 降 40%
+- 寫技術部落格每月 1 篇，內部 wiki 觀看數 Top 3
+
+軟體工程師 @ 新創 Acme (2016-07 – 2019-05)
+- 三人新創第一位前端，從 0 設計 React stack 與 CI/CD
+- 客戶數 100 → 3000，Series A 募資成功
+
+Education
+國立台灣大學, 資訊工程, 學士, 2012 – 2016
+
+Skills
+React, TypeScript, Next.js, Node.js, GraphQL, CI/CD, Docker, AWS, Figma, Jest
+
+Languages
+中文 - 母語
+English - Professional
+
+Certifications
+AWS Certified Solutions Architect - Associate

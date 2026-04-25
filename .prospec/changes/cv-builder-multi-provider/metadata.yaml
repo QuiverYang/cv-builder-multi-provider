@@ -1,0 +1,9 @@
+name: cv-builder-multi-provider
+created_at: 2026-04-25T13:12:17.332Z
+status: tasks
+description: CV Builder v2 — extend BYOK chat backend from Anthropic-only to 4
+  providers (Anthropic, OpenAI, Google Gemini, GitHub Models) so users without
+  an Anthropic key can still use the resume-building chat. Introduce a provider
+  abstraction layer on the server, two-step onboarding (provider then key), and
+  migrate localStorage from key-only to provider+key schema without disrupting
+  v1 users.

@@ -1,0 +1,20 @@
+[
+  {
+    "id": "modern-minimal",
+    "label": "現代簡約",
+    "description": "黑白單欄、無襯線，適合科技業",
+    "file": "modern-minimal.html"
+  },
+  {
+    "id": "colorful",
+    "label": "彩色設計感",
+    "description": "雙欄彩色側欄，適合創意產業",
+    "file": "colorful.html"
+  },
+  {
+    "id": "academic-serif",
+    "label": "學術型",
+    "description": "單欄襯線字體，出版列表優先，適合學術/研究職",
+    "file": "academic-serif.html"
+  }
+]
