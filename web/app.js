@@ -12,6 +12,52 @@ const SESSION_ID = Math.random().toString(36).slice(2);
 const PARSE_TIMEOUT_MS = 45_000;
 const AI_PARSE_TIMEOUT_MS = 120_000;
 const POLISH_TIMEOUT_MS = 120_000;
+const SAMPLE_PREVIEW_TIMEOUT_MS = 20_000;
+
+const SAMPLE_RESUME = {
+  name: '王小明',
+  headline: '產品經理 / Product Manager',
+  summary: '具 8 年跨部門產品經驗，擅長需求拆解、數據分析與端到端交付。曾主導多項 B2B 與 B2C 產品改版，提升留存與轉換，並建立可持續的產品開發流程。',
+  contact: {
+    email: 'demo@example.com',
+    phone: '+886-912-345-678',
+    location: '台北市',
+    links: ['https://www.linkedin.com/in/demo-profile', 'https://github.com/demo-profile'],
+  },
+  experiences: [
+    {
+      company: '星雲科技',
+      title: 'Senior Product Manager',
+      start: '2021-03',
+      end: 'present',
+      bullets: [
+        '主導核心產品重構，6 個月內將月活提升 28%。',
+        '建立產品儀表板與實驗流程，A/B 測試迭代速度提升 2 倍。',
+        '整合設計、工程與營運節奏，將需求交付準時率提升到 95%。',
+      ],
+      location: '台北',
+    },
+    {
+      company: '藍海數位',
+      title: 'Product Manager',
+      start: '2018-06',
+      end: '2021-02',
+      bullets: [
+        '負責會員與付費流程優化，付費轉換率提升 17%。',
+        '導入使用者訪談與旅程地圖，降低新手流失率 22%。',
+      ],
+      location: '新北',
+    },
+  ],
+  education: [
+    { school: '國立台灣大學', degree: 'MBA', field: '資訊管理', start: '2014', end: '2016' },
+  ],
+  skills: ['Product Strategy', 'Roadmapping', 'SQL', 'A/B Testing', 'Figma', 'Agile'],
+  languages: [{ name: '中文', level: '母語' }, { name: 'English', level: 'Professional' }],
+  certifications: [{ name: 'PMP', issuer: 'PMI', date: '2020' }],
+  _source: 'sample-preview',
+  _missing: [],
+};
 
 const KNOWN_PROVIDERS = ['anthropic', 'openai', 'gemini', 'github'];
 
@@ -894,25 +940,61 @@ function showPreview(html) {
 async function rerenderTemplate(templateId) {
   state.currentTemplate = templateId;
   updateTemplateButtons();
-  if (!state.parsedData) return;
+  const renderData = state.parsedData || SAMPLE_RESUME;
   setStatus('切換樣板中…');
   const t0 = performance.now();
   try {
+    const hasRealData = Boolean(state.parsedData);
     const res = await fetch('/api/render', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ data: state.parsedData, answers: Object.keys(state.answers ?? {}).length > 0 ? state.answers : null, template: templateId, privacy_decision: 'keep' }),
+      body: JSON.stringify({
+        data: renderData,
+        answers: hasRealData && Object.keys(state.answers ?? {}).length > 0 ? state.answers : null,
+        template: templateId,
+        privacy_decision: 'keep',
+      }),
     });
     if (!res.ok) return;
     const json = await res.json();
-    state.renderedHtml = json.html;
-    state.renderedFilename = json.filename;
     showPreview(json.html);
-    saveState();
+    if (hasRealData) {
+      state.renderedHtml = json.html;
+      state.renderedFilename = json.filename;
+      saveState();
+      downloadArea.hidden = false;
+    } else {
+      downloadArea.hidden = true;
+    }
     const elapsed = Math.round(performance.now() - t0);
-    setStatus(`切換完成（${elapsed}ms）`);
+    setStatus(`${hasRealData ? '切換完成' : '示範樣板切換完成'}（${elapsed}ms）`);
     setTimeout(() => setStatus(''), 2000);
   } catch { setStatus('切換失敗'); }
+}
+
+async function showSamplePreviewIfNeeded() {
+  if (state.parsedData || state.renderedHtml) return;
+  setStatus('載入示範樣板中…');
+  try {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), SAMPLE_PREVIEW_TIMEOUT_MS);
+    const res = await fetch('/api/render', {
+      method: 'POST',
+      signal: ctrl.signal,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ data: SAMPLE_RESUME, template: state.currentTemplate, privacy_decision: 'keep' }),
+    }).finally(() => clearTimeout(timer));
+    if (!res.ok) return;
+    const json = await res.json();
+    showPreview(json.html);
+    showTemplateGallery();
+    downloadArea.hidden = true;
+    previewPlaceholder.hidden = true;
+  } catch {
+    // keep placeholder when sample preview is unavailable
+  } finally {
+    if (!state.parsedData && !state.renderedHtml) setStatus('');
+  }
 }
 
 /* ─── Template Gallery ───────────────────────────────────────────────────── */
@@ -1045,6 +1127,7 @@ async function init() {
   } else {
     greetIfNeeded();
   }
+  await showSamplePreviewIfNeeded();
 }
 
 init();

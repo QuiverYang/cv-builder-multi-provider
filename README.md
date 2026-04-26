@@ -90,12 +90,3 @@ npm run smoke
 ANTHROPIC_API_KEY_INTEGRATION=sk-ant-... OPENAI_API_KEY_INTEGRATION=sk-... npm run smoke -- --integration
 ```
 
-## v1 比較
-
-| 功能 | v1 | v2 |
-|------|----|----|
-| Provider | Anthropic only | Anthropic / OpenAI / Gemini / GitHub Models |
-| Onboarding | 貼 Anthropic key | 2-step：選 provider → 貼 key |
-| localStorage | `cv-builder.anthropic-key` | `cv-builder.provider` (JSON) |
-| Migration | N/A | 自動 migrate v1 key |
-| 免費額度 | 無 | Gemini + GitHub Models 有免費額度 |
