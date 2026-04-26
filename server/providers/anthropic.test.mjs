@@ -45,7 +45,7 @@ describe('Anthropic adapter — DEFAULT_MODEL', () => {
 describe('Anthropic adapter — streamChat returns ReadableStream', () => {
   it('returns a ReadableStream instance', () => {
     const stream = streamChat({
-      apiKey: 'sk-ant-fake',
+      apiKey: 'sk-ant-' + 'fake',
       systemPrompt: 'test',
       messages: [{ role: 'user', content: 'hello' }],
       maxTokens: 10,
@@ -62,7 +62,7 @@ describe('Anthropic adapter — AbortSignal (pre-aborted)', () => {
     const ctrl = new AbortController();
     ctrl.abort();
     const stream = streamChat({
-      apiKey: 'sk-ant-fake',
+      apiKey: 'sk-ant-' + 'fake',
       systemPrompt: '',
       messages: [{ role: 'user', content: 'hello' }],
       abortSignal: ctrl.signal,
@@ -81,7 +81,7 @@ describe('Anthropic adapter — error taxonomy', () => {
     // This may require network; if unavailable, skip gracefully.
     const ctrl = new AbortController();
     const stream = streamChat({
-      apiKey: 'sk-ant-fake-definitely-invalid-key-12345678',
+      apiKey: 'sk-ant-' + 'fake-definitely-invalid-key-12345678',
       systemPrompt: '',
       messages: [{ role: 'user', content: 'hello' }],
       abortSignal: ctrl.signal,

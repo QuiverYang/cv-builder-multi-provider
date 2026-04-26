@@ -2,7 +2,8 @@ import { GoogleGenAI } from '@google/genai';
 import { makeErrorEvent, mapGeminiError, ERROR_CODES } from '../error-taxonomy.js';
 import { redactingLogger } from '../redact.js';
 
-export const DEFAULT_MODEL = 'gemini-2.0-flash';
+export const DEFAULT_MODEL = 'gemini-2.5-flash';
+const DEFAULT_VERTEX_MODEL = 'gemini-2.0-flash-001';
 const IDLE_TIMEOUT_MS = 60_000;
 const WATCHDOG_INTERVAL_MS = 2_000;
 const SYSTEM_INSTRUCTION_LIMIT = 30_000;
@@ -17,8 +18,9 @@ function convertMessages(messages) {
   });
 }
 
-export function streamChat({ apiKey, systemPrompt, messages, model, maxTokens = 2048, abortSignal }) {
-  const resolvedModel = model ?? process.env.GEMINI_MODEL ?? DEFAULT_MODEL;
+export function streamChat({ apiKey, project, location, systemPrompt, messages, model, maxTokens = 2048, abortSignal, responseMimeType }) {
+  const isVertex = Boolean(project);
+  const resolvedModel = model ?? process.env.GEMINI_MODEL ?? (isVertex ? DEFAULT_VERTEX_MODEL : DEFAULT_MODEL);
 
   return new ReadableStream({
     async start(controller) {
@@ -51,7 +53,9 @@ export function streamChat({ apiKey, systemPrompt, messages, model, maxTokens = 
       }
 
       try {
-        const ai = new GoogleGenAI({ apiKey });
+        const ai = isVertex
+          ? new GoogleGenAI({ vertexai: true, project, location: location ?? 'us-central1' })
+          : new GoogleGenAI({ apiKey });
 
         let contents = convertMessages(messages);
         // Gemini rejects empty contents
@@ -60,6 +64,9 @@ export function streamChat({ apiKey, systemPrompt, messages, model, maxTokens = 
         }
 
         const config = { maxOutputTokens: maxTokens };
+        if (responseMimeType) {
+          config.responseMimeType = responseMimeType;
+        }
 
         // Handle systemPrompt placement
         let useSystemInstruction = false;

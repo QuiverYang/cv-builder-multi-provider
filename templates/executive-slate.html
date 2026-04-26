@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Resume</title>
+<style>
+  :root {
+    --ink: #172033;
+    --muted: #667085;
+    --line: #cfd6df;
+    --panel: #eef2f6;
+    --accent: #8a5a2b;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 34px;
+    background: #f7f8fa;
+    color: var(--ink);
+    font-family: "Avenir Next", -apple-system, BlinkMacSystemFont, "PingFang TC", "Microsoft JhengHei", sans-serif;
+    font-size: 14px;
+    line-height: 1.58;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
+  .sheet {
+    max-width: 900px;
+    margin: 0 auto;
+    background: #fff;
+    border: 1px solid var(--line);
+    box-shadow: 0 18px 40px rgba(23, 32, 51, .08);
+  }
+  .masthead {
+    background: linear-gradient(135deg, #172033 0%, #303a4f 100%);
+    color: #fff;
+    padding: 36px 44px 30px;
+  }
+  h1.name { margin: 0 0 6px; font-size: 34px; font-weight: 700; letter-spacing: .02em; }
+  .headline { margin: 0 0 13px; color: #d9dee8; font-size: 15px; }
+  .contact { margin: 0; color: #d9dee8; font-size: 12.5px; }
+  .contact a { color: #f2c078; text-decoration: none; }
+  main { padding: 34px 44px 42px; }
+  section.sec { margin: 0 0 25px; }
+  section.sec h2 {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 14px;
+    color: var(--accent);
+    font-size: 12px;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+  }
+  section.sec h2::after { content: ""; height: 1px; flex: 1; background: var(--line); }
+  .sec-summary {
+    background: var(--panel);
+    padding: 18px 20px;
+    border-left: 5px solid var(--accent);
+  }
+  .exp { margin-bottom: 20px; break-inside: avoid; }
+  .exp-head { display: grid; grid-template-columns: 1fr auto; gap: 3px 12px; align-items: baseline; }
+  .exp-title { font-size: 15px; font-weight: 700; }
+  .exp-company { font-weight: 600; color: var(--muted); }
+  .exp-sep { color: var(--muted); }
+  .exp-date { color: var(--accent); font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .loc { color: var(--muted); font-size: 12px; }
+  ul.bullets { margin: 7px 0 0 18px; padding: 0; }
+  ul.bullets li { margin: 3px 0; }
+  ul.bullets li::marker { color: var(--accent); }
+  .edu { display: flex; gap: 9px; margin-bottom: 8px; align-items: baseline; }
+  .edu-school { font-weight: 700; }
+  .edu-degree, .edu-date { color: var(--muted); }
+  .edu-date { margin-left: auto; font-size: 12px; }
+  .skills-wrap { display: flex; flex-wrap: wrap; gap: 7px; }
+  .skill { background: #f2eadf; color: #6b421f; border: 1px solid #ddc7ad; border-radius: 2px; padding: 4px 10px; font-size: 12px; }
+  ul { margin: 0; padding-left: 20px; }
+  @media print { body { background: #fff; padding: 0; } .sheet { box-shadow: none; border: 0; } section.sec { break-inside: avoid; } }
+</style>
+</head>
+<body>
+{{TODOS}}
+<div class="sheet">
+  <header class="masthead">{{HEADER}}</header>
+  <main>{{SECTIONS}}</main>
+</div>
+</body>
+</html>

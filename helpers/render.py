@@ -209,12 +209,25 @@ SECTIONS: list[tuple[str, str, callable]] = [
     ("certifications", "Certifications", render_certifications),
 ]
 
-# Per-template split: which section keys go in the sidebar (colorful only).
-# modern-minimal is single-column, so SIDEBAR_KEYS is empty.
+# Per-template split: which section keys go in the sidebar.
+# Single-column templates use an empty set.
 SIDEBAR_KEYS_BY_TEMPLATE = {
     "colorful": {"skills", "languages", "certifications"},
     "modern-minimal": set(),
     "academic-serif": set(),
+    "ats-classic": set(),
+    "executive-slate": set(),
+    "tech-sidebar": {"skills", "languages", "certifications"},
+    "studio-pop": {"skills", "languages", "certifications"},
+    "startup-sprint": {"skills", "languages", "certifications"},
+    "healthcare-calm": {"skills", "languages", "certifications"},
+    "hospitality-warm": {"skills", "languages", "certifications"},
+    "education-playbook": set(),
+    "finance-signal": {"skills", "languages", "certifications"},
+    "retail-bright": {"skills", "languages", "certifications"},
+    "legal-cobalt": set(),
+    "impact-earth": {"skills", "languages", "certifications"},
+    "maker-grid": {"skills", "languages", "certifications"},
 }
 
 
@@ -288,7 +301,28 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--data", required=True)
     ap.add_argument("--answers", default=None)
-    ap.add_argument("--template", choices=["modern-minimal", "colorful", "academic-serif"], default="modern-minimal")
+    ap.add_argument(
+        "--template",
+        choices=[
+            "modern-minimal",
+            "colorful",
+            "academic-serif",
+            "ats-classic",
+            "executive-slate",
+            "tech-sidebar",
+            "studio-pop",
+            "startup-sprint",
+            "healthcare-calm",
+            "hospitality-warm",
+            "education-playbook",
+            "finance-signal",
+            "retail-bright",
+            "legal-cobalt",
+            "impact-earth",
+            "maker-grid",
+        ],
+        default="modern-minimal",
+    )
     ap.add_argument("--outdir", default=".")
     args = ap.parse_args()
 

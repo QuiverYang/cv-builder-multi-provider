@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Resume</title>
+<style>
+  :root { --ink:#111827; --muted:#6b7280; --cobalt:#1d4ed8; --aqua:#22d3ee; --paper:#ffffff; --line:#dbeafe; }
+  * { box-sizing:border-box; }
+  body { margin:0; padding:30px; background:linear-gradient(135deg, #172554, #1e3a8a); color:var(--ink); font-family:"Source Sans Pro", "PingFang TC", "Microsoft JhengHei", sans-serif; font-size:13.7px; line-height:1.62; word-break:break-word; overflow-wrap:anywhere; }
+  .page { max-width:900px; margin:0 auto; background:var(--paper); border-radius:20px; overflow:hidden; box-shadow:0 28px 80px rgba(15,23,42,.28); }
+  .masthead { padding:40px 44px 30px; border-top:12px solid var(--aqua); background:linear-gradient(90deg, #eff6ff, #fff); }
+  h1.name { margin:0 0 8px; font-size:39px; letter-spacing:-.04em; color:#0f172a; }
+  .headline { margin:0 0 12px; color:var(--cobalt); font-weight:900; }
+  .contact { margin:0; color:var(--muted); font-size:12px; }
+  .contact a { color:var(--cobalt); text-decoration:none; font-weight:800; }
+  main { padding:34px 44px 40px; }
+  section.sec { margin:0 0 25px; }
+  section.sec h2 { margin:0 0 12px; display:flex; align-items:center; gap:10px; color:#0f172a; font-size:13px; letter-spacing:.18em; text-transform:uppercase; }
+  section.sec h2::before { content:""; width:7px; height:24px; background:linear-gradient(var(--cobalt), var(--aqua)); border-radius:999px; }
+  .exp { margin:0 0 18px; padding:16px 18px; border:1px solid var(--line); border-radius:14px; break-inside:avoid; }
+  .exp-head { display:flex; flex-wrap:wrap; gap:4px 8px; align-items:baseline; }
+  .exp-title { font-weight:950; color:#1e3a8a; }
+  .exp-company { font-weight:850; }
+  .exp-date { margin-left:auto; color:#0891b2; font-size:12px; font-weight:850; }
+  .exp-sep,.loc,.edu-degree,.edu-date { color:var(--muted); }
+  ul.bullets { margin:8px 0 0; padding-left:18px; }
+  li::marker { color:var(--cobalt); }
+  .edu { margin-bottom:10px; }
+  .edu-school { font-weight:900; }
+  .skills-wrap { display:flex; flex-wrap:wrap; gap:7px; }
+  .skill { display:inline-block; padding:5px 10px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe; border-radius:999px; font-size:12px; font-weight:850; }
+  ul { margin:0; padding-left:18px; }
+  @media print { body{background:#fff;padding:0}.page{box-shadow:none;border-radius:0}.exp,section.sec{break-inside:avoid} }
+</style>
+</head>
+<body>
+{{TODOS}}
+<div class="page">
+  <header class="masthead">{{HEADER}}</header>
+  <main>{{MAIN_SECTIONS}}</main>
+</div>
+</body>
+</html>

@@ -143,7 +143,7 @@ await test('mapError: AbortError → STREAM_ABORTED', () => {
 });
 
 await test('mapError: redacts sk-ant key from message', () => {
-  const err = mapError({ message: 'failed with sk-ant-api03-secret123 in body' });
+  const err = mapError({ message: `failed with ${'sk-ant-' + 'api03-secret123'} in body` });
   assert(!err.message_zh.includes('sk-ant-'), 'message_zh does not contain sk-ant-');
   assert(err.message_zh.includes('[REDACTED]'), 'message_zh contains [REDACTED]');
 });

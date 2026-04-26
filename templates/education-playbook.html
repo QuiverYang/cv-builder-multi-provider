@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Resume</title>
+<style>
+  :root { --ink:#1e293b; --muted:#64748b; --blue:#3b82f6; --yellow:#facc15; --red:#ef4444; --paper:#fffdf2; --line:#d8cfa8; }
+  * { box-sizing:border-box; }
+  body { margin:0; padding:30px; background:#f1f5f9; color:var(--ink); font-family:"Trebuchet MS", "PingFang TC", "Microsoft JhengHei", sans-serif; font-size:13.8px; line-height:1.64; word-break:break-word; overflow-wrap:anywhere; }
+  .page { max-width:900px; margin:0 auto; padding:38px 42px; background:linear-gradient(#0000 31px, #dbeafe 32px), var(--paper); background-size:100% 32px; border-radius:18px; border:1px solid var(--line); box-shadow:0 18px 45px rgba(30,41,59,.14); position:relative; }
+  .page::before { content:""; position:absolute; left:24px; top:0; bottom:0; width:3px; background:#fecaca; }
+  .masthead { margin-left:12px; padding:0 0 20px 18px; border-bottom:4px double var(--line); }
+  h1.name { margin:0 0 8px; font-size:36px; letter-spacing:-.04em; text-decoration:underline; text-decoration-color:var(--yellow); text-decoration-thickness:8px; text-underline-offset:-4px; }
+  .headline { display:inline; margin:0; color:#1d4ed8; font-weight:900; background:#dbeafe; padding:3px 8px; border-radius:8px; }
+  .contact { margin:12px 0 0; color:var(--muted); font-size:12px; }
+  .contact a { color:#2563eb; text-decoration:none; font-weight:800; }
+  main { margin-left:12px; padding:26px 0 0 18px; }
+  section.sec { margin:0 0 25px; }
+  section.sec h2 { margin:0 0 12px; font-size:15px; color:#1e293b; }
+  section.sec h2::before { content:"★"; color:var(--red); margin-right:8px; }
+  .exp { margin:0 0 18px; padding:14px 16px; background:rgba(255,255,255,.78); border:2px dashed #bfdbfe; border-radius:16px; break-inside:avoid; }
+  .exp-head { display:flex; flex-wrap:wrap; gap:4px 8px; align-items:baseline; }
+  .exp-title { font-weight:950; color:#1d4ed8; }
+  .exp-company { font-weight:800; }
+  .exp-date { margin-left:auto; color:#b45309; font-size:12px; font-weight:900; }
+  .exp-sep,.loc,.edu-degree,.edu-date { color:var(--muted); }
+  ul.bullets { margin:8px 0 0; padding-left:22px; }
+  li::marker { color:#ef4444; }
+  .edu { margin-bottom:10px; padding-left:12px; border-left:5px solid var(--yellow); }
+  .edu-school { font-weight:950; }
+  .skills-wrap { display:flex; flex-wrap:wrap; gap:7px; }
+  .skill { display:inline-block; padding:5px 10px; background:#fef08a; color:#713f12; border-radius:8px; font-size:12px; font-weight:900; transform:rotate(-1deg); }
+  .skill:nth-child(even) { background:#bfdbfe; color:#1e40af; transform:rotate(1deg); }
+  ul { margin:0; padding-left:20px; }
+  @media print { body{background:#fff;padding:0}.page{box-shadow:none;border-radius:0}.exp,section.sec{break-inside:avoid} }
+</style>
+</head>
+<body>
+{{TODOS}}
+<div class="page">
+  <header class="masthead">{{HEADER}}</header>
+  <main>{{MAIN_SECTIONS}}</main>
+</div>
+</body>
+</html>

@@ -2,3 +2,11 @@ node_modules/
 tmp-renders/
 *.log
 .env
+.env.*
+!.env.example
+test-results/
+coverage/
+*.pyc
+__pycache__/
+.DS_Store
+verification-*.md

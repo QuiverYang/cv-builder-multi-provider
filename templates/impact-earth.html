@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Resume</title>
+<style>
+  :root { --ink:#1c2b21; --muted:#65776b; --forest:#166534; --leaf:#84cc16; --sand:#f5efd9; --sky:#bae6fd; }
+  * { box-sizing:border-box; }
+  body { margin:0; padding:30px; background:linear-gradient(150deg, #dcfce7, #bae6fd); color:var(--ink); font-family:"Lato", "PingFang TC", "Microsoft JhengHei", sans-serif; font-size:13.7px; line-height:1.65; word-break:break-word; overflow-wrap:anywhere; }
+  .page { max-width:950px; margin:0 auto; display:grid; grid-template-columns:290px 1fr; background:#fffdf5; border-radius:30px; overflow:hidden; box-shadow:0 24px 68px rgba(22,101,52,.18); }
+  aside { padding:36px 28px; background:var(--sand); position:relative; }
+  aside::after { content:""; position:absolute; right:-48px; bottom:-48px; width:150px; height:150px; border-radius:65% 35% 60% 40%; background:rgba(132,204,22,.25); }
+  main { padding:36px 40px; }
+  h1.name { margin:0 0 8px; font-size:35px; line-height:1.03; letter-spacing:-.04em; color:#14532d; }
+  .headline { margin:0 0 12px; color:#4d7c0f; font-weight:900; }
+  .contact { margin:0 0 24px; color:var(--muted); font-size:12px; line-height:1.75; }
+  .contact a { color:#166534; font-weight:800; text-decoration:none; }
+  section.sec { margin:0 0 24px; }
+  section.sec h2 { margin:0 0 12px; color:#166534; font-size:13px; letter-spacing:.14em; text-transform:uppercase; }
+  section.sec h2::before { content:"●"; color:var(--leaf); margin-right:8px; }
+  .exp { margin:0 0 18px; padding:16px 18px; background:#f7fee7; border-radius:20px; border:1px solid #d9f99d; break-inside:avoid; }
+  .exp-head { display:flex; flex-wrap:wrap; gap:4px 8px; align-items:baseline; }
+  .exp-title { font-weight:950; color:#14532d; }
+  .exp-company { font-weight:850; color:#0369a1; }
+  .exp-date { margin-left:auto; color:#4d7c0f; font-size:12px; font-weight:850; }
+  .exp-sep,.loc,.edu-degree,.edu-date { color:var(--muted); }
+  ul.bullets { margin:8px 0 0; padding-left:18px; }
+  li::marker { color:var(--leaf); }
+  .edu { margin-bottom:10px; }
+  .edu-school { font-weight:900; }
+  .skills-wrap { display:flex; flex-wrap:wrap; gap:7px; }
+  .skill { display:inline-block; padding:5px 10px; background:#dcfce7; color:#166534; border-radius:999px; font-size:12px; font-weight:900; }
+  aside .skill { background:#e0f2fe; color:#0369a1; }
+  ul { margin:0; padding-left:18px; }
+  @media print { body{background:#fff;padding:0}.page{box-shadow:none;border-radius:0}.exp,section.sec{break-inside:avoid} }
+  @media (max-width:760px){ .page{grid-template-columns:1fr} }
+</style>
+</head>
+<body>
+{{TODOS}}
+<div class="page">
+  <aside><div class="masthead">{{HEADER}}</div>{{SIDEBAR_SECTIONS}}</aside>
+  <main>{{MAIN_SECTIONS}}</main>
+</div>
+</body>
+</html>

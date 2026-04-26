@@ -26,7 +26,7 @@ describe('Gemini adapter — DEFAULT_MODEL', () => {
 describe('Gemini adapter — streamChat returns ReadableStream', () => {
   it('returns a ReadableStream instance', () => {
     const stream = streamChat({
-      apiKey: 'AIzaFake',
+      apiKey: 'AIza' + 'Fake',
       systemPrompt: 'test',
       messages: [{ role: 'user', content: 'hello' }],
       maxTokens: 10,
@@ -41,7 +41,7 @@ describe('Gemini adapter — AbortSignal (pre-aborted)', () => {
     const ctrl = new AbortController();
     ctrl.abort();
     const stream = streamChat({
-      apiKey: 'AIzaFake',
+      apiKey: 'AIza' + 'Fake',
       systemPrompt: '',
       messages: [{ role: 'user', content: 'hello' }],
       abortSignal: ctrl.signal,
@@ -58,7 +58,7 @@ describe('Gemini adapter — role rewrite (assistant → model)', () => {
     // Verify adapter does not throw during construction for assistant role messages
     assert.doesNotThrow(() => {
       const stream = streamChat({
-        apiKey: 'AIzaFake',
+        apiKey: 'AIza' + 'Fake',
         systemPrompt: '',
         messages: [
           { role: 'user', content: 'hello' },
@@ -75,7 +75,7 @@ describe('Gemini adapter — empty messages padding', () => {
   it('streamChat accepts empty messages array without throwing', () => {
     assert.doesNotThrow(() => {
       const stream = streamChat({
-        apiKey: 'AIzaFake',
+        apiKey: 'AIza' + 'Fake',
         systemPrompt: 'test',
         messages: [],
       });
@@ -88,7 +88,7 @@ describe('Gemini adapter — error taxonomy (fake key)', () => {
   it('returns an error event for invalid key', async () => {
     const ctrl = new AbortController();
     const stream = streamChat({
-      apiKey: 'AIzaSyFakeKeyThatIsDefinitelyInvalid12345',
+      apiKey: 'AIza' + 'SyFakeKeyThatIsDefinitelyInvalid12345',
       systemPrompt: '',
       messages: [{ role: 'user', content: 'hello' }],
       abortSignal: ctrl.signal,

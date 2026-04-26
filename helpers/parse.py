@@ -457,7 +457,7 @@ def parse_html_generic(html: str, source_tag: str) -> dict[str, Any]:
     data = parse_plaintext(text)
 
     raw_links = _URL_RE.findall(html)
-    data["contact"]["links"] = list(dict.fromkeys(data["contact"]["links"] + raw_links))[:10]
+    data["contact"]["links"] = _filter_contact_links(data["contact"]["links"] + raw_links)[:5]
 
     # title tag -> headline fallback
     m = re.search(r"<title[^>]*>(.*?)</title>", html, re.I | re.S)
@@ -466,6 +466,44 @@ def parse_html_generic(html: str, source_tag: str) -> dict[str, Any]:
 
     data["_source"] = source_tag
     return data
+
+
+def _filter_contact_links(links: list[str]) -> list[str]:
+    allowed_hosts = {
+        "github.com",
+        "gitlab.com",
+        "linkedin.com",
+        "www.linkedin.com",
+        "medium.com",
+        "newway-explore.com",
+        "www.newway-explore.com",
+    }
+    blocked_hosts = {
+        "apps.apple.com",
+        "www.youtube.com",
+        "youtube.com",
+        "youtu.be",
+        "pda.104.com.tw",
+        "104.com.tw",
+        "www.googletagmanager.com",
+        "connect.facebook.net",
+        "player.vimeo.com",
+    }
+    out: list[str] = []
+    seen: set[str] = set()
+    for raw in links:
+        m = re.match(r"https?://([^/]+)/?", raw.strip(), re.I)
+        if not m:
+            continue
+        host = m.group(1).lower()
+        is_allowed = host in allowed_hosts or host.endswith(".github.io")
+        is_blocked = host in blocked_hosts or host.endswith(".104.com.tw")
+        if not is_allowed or is_blocked:
+            continue
+        if raw not in seen:
+            seen.add(raw)
+            out.append(raw)
+    return out
 
 
 def parse_linkedin_zip(path: str) -> dict[str, Any]:

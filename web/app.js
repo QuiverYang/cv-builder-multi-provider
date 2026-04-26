@@ -9,6 +9,9 @@ const KEY_PROVIDER_V2 = 'cv-builder.provider';   // v2 schema: JSON {provider, k
 const KEY_API_KEY_V1 = 'cv-builder.anthropic-key'; // v1 legacy: raw string
 const KEY_STATE = 'cv-builder-state-v1';
 const SESSION_ID = Math.random().toString(36).slice(2);
+const PARSE_TIMEOUT_MS = 45_000;
+const AI_PARSE_TIMEOUT_MS = 120_000;
+const POLISH_TIMEOUT_MS = 120_000;
 
 const KNOWN_PROVIDERS = ['anthropic', 'openai', 'gemini', 'github'];
 
@@ -26,8 +29,8 @@ const PROVIDER_META = {
     helperLinkText: 'OpenAI Platform ↗',
   },
   gemini: {
-    placeholder: 'AIzaSy...',
-    helperText: '前往 Google AI Studio 取得 API Key（有免費額度）',
+    placeholder: 'AIzaSy... 或 AQ...',
+    helperText: '前往 Google AI Studio 或 Google Cloud 取得 Gemini API Key（有免費額度）',
     helperLink: 'https://aistudio.google.com/apikey',
     helperLinkText: 'Google AI Studio ↗',
   },
@@ -61,6 +64,11 @@ function storageSet(key, value) {
     localStorage.setItem(key, value);
     return true;
   } catch {
+    if (key === KEY_STATE) {
+      try { localStorage.removeItem(KEY_STATE); } catch {}
+      delete memStore[KEY_STATE];
+      return false;
+    }
     storageOk = false;
     memStore[key] = value;
     document.getElementById('storage-banner').hidden = false;
@@ -70,6 +78,29 @@ function storageSet(key, value) {
 
 function storageRemove(key) {
   try { localStorage.removeItem(key); } catch { delete memStore[key]; }
+}
+
+function timeoutError(message_zh) {
+  const err = new Error(message_zh);
+  err.message_zh = message_zh;
+  return err;
+}
+
+function repairOversizedState() {
+  try {
+    const raw = localStorage.getItem(KEY_STATE);
+    if (!raw) return;
+    if (raw.length > 250_000) {
+      localStorage.removeItem(KEY_STATE);
+      return;
+    }
+    const loaded = JSON.parse(raw);
+    if (['parsing', 'rendering'].includes(loaded?.phase)) {
+      localStorage.removeItem(KEY_STATE);
+    }
+  } catch {
+    try { localStorage.removeItem(KEY_STATE); } catch {}
+  }
 }
 
 /* ─── Provider credential state ─────────────────────────────────────────── */
@@ -150,12 +181,17 @@ let state = {
   currentTemplate: 'modern-minimal',
   renderedHtml: null,
   renderedFilename: null,
+  polished: false,
   phase: 'idle',
 };
 
-function saveState() { storageSet(KEY_STATE, JSON.stringify(state)); }
+function saveState() {
+  const persisted = { ...state, renderedHtml: null };
+  storageSet(KEY_STATE, JSON.stringify(persisted));
+}
 
 function loadState() {
+  repairOversizedState();
   const raw = storageGet(KEY_STATE);
   if (!raw) return;
   try {
@@ -179,6 +215,8 @@ const previewFrame = $('preview-frame');
 const previewPlaceholder = $('preview-placeholder');
 const downloadArea = $('download-area');
 const downloadBtn = $('download-btn');
+const storageBanner = $('storage-banner');
+const multitabBanner = $('multitab-banner');
 
 /* ─── Theme ─────────────────────────────────────────────────────────────── */
 function applyTheme(t) {
@@ -194,8 +232,12 @@ $('theme-toggle').addEventListener('click', () => {
   applyTheme(current === 'terminal' ? 'light' : 'terminal');
 });
 
+$('storage-banner-close').addEventListener('click', () => { storageBanner.hidden = true; });
+$('multitab-banner-close').addEventListener('click', () => { multitabBanner.hidden = true; });
+
 /* ─── Onboarding Modal (2-step) ──────────────────────────────────────────── */
 let selectedProvider = null;
+let _vertexGeminiAvailable = false;
 
 function showByokModal() {
   byokModal.hidden = false;
@@ -225,6 +267,7 @@ async function probeAndDisableProviders() {
     if (!res.ok) return;
     const json = await res.json();
     const providers = json.providers ?? {};
+    _vertexGeminiAvailable = json.vertexGemini ?? false;
     for (const id of KNOWN_PROVIDERS) {
       const opt = document.getElementById(`opt-${id}`);
       if (!opt) continue;
@@ -236,6 +279,15 @@ async function probeAndDisableProviders() {
           note = document.createElement('span');
           note.className = 'sdk-missing-note';
           note.textContent = '(SDK 未安裝)';
+          opt.appendChild(note);
+        }
+      }
+      if (id === 'gemini' && _vertexGeminiAvailable) {
+        let note = opt.querySelector('.vertex-note');
+        if (!note) {
+          note = document.createElement('span');
+          note.className = 'vertex-note';
+          note.textContent = '(Vertex AI — 不需要 key)';
           opt.appendChild(note);
         }
       }
@@ -256,6 +308,12 @@ document.querySelectorAll('input[name="provider"]').forEach(radio => {
 
 $('step1-next').addEventListener('click', () => {
   if (!selectedProvider) return;
+  if (selectedProvider === 'gemini' && _vertexGeminiAvailable) {
+    setCredentials('gemini', 'vertex-ai');
+    hideByokModal();
+    greetIfNeeded();
+    return;
+  }
   showStep(2);
   // Update step 2 UI for selected provider
   const meta = PROVIDER_META[selectedProvider];
@@ -346,7 +404,7 @@ let inputHistory = [];
 let historyIdx = -1;
 
 chatInput.addEventListener('keydown', e => {
-  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); return; }
+  if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) { e.preventDefault(); handleSend(); return; }
   if (e.key === 'Escape') { chatInput.value = ''; historyIdx = -1; return; }
   if (e.key === 'ArrowUp' && chatInput.value === '') {
     e.preventDefault();
@@ -393,6 +451,16 @@ async function handleSend() {
     state.phase = 'idle';
     saveState();
     return;
+  }
+
+  if (/^https?:\/\//.test(text.trim()) || /^<!DOCTYPE|^<html/i.test(text.trim())) {
+    state.parsedData = null;
+    state.gapsData = null;
+    state.answers = {};
+    state.renderedHtml = null;
+    state.renderedFilename = null;
+    state.polished = false;
+    state.phase = 'waiting-input';
   }
 
   chatInput.value = '';
@@ -538,17 +606,23 @@ async function streamChat(creds, prefixMsg = null) {
 /* ─── Input parsing flow ─────────────────────────────────────────────────── */
 async function handleInitialInput(text, creds) {
   const kind = detectKind(text);
-  await doStreamChat(creds, `正在解析您的履歷（${kind}）…`);
+  addBubble('system', `正在解析您的履歷（${kind}）…`);
   setStatus('解析中…');
   state.phase = 'parsing';
+  saveState();
 
   try {
     const parseResult = await callParse(kind, text);
 
-    if (!parseResult.ok) {
-      const errMsg = `[PARSE_RESULT] ${JSON.stringify(parseResult)}`;
-      state.messages.push({ role: 'user', content: errMsg });
-      await doStreamChat(creds);
+    let finalParseResult = parseResult;
+    if (!finalParseResult.ok) {
+      setStatus('本地解析不足，改由 AI 解析…');
+      addBubble('system', '本地解析資料不足，改由 AI 嘗試解析履歷內容…');
+      finalParseResult = await callAiParse(kind, text, creds, parseResult);
+    }
+
+    if (!finalParseResult.ok) {
+      addBubble('ai', finalParseResult.message_zh ?? 'AI 解析失敗，請改貼可見的履歷文字或 HTML。');
       state.phase = 'waiting-input';
       saveState();
       setInputDisabled(false);
@@ -556,7 +630,7 @@ async function handleInitialInput(text, creds) {
       return;
     }
 
-    state.parsedData = parseResult.data;
+    state.parsedData = finalParseResult.data;
     const summary = buildSummary(state.parsedData);
     addBubble('system', summary);
 
@@ -589,11 +663,52 @@ function buildSummary(data) {
 }
 
 async function callParse(kind, input) {
-  const res = await fetch('/api/parse', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ kind, input }),
-  });
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), PARSE_TIMEOUT_MS);
+  let res;
+  try {
+    res = await fetch('/api/parse', {
+      method: 'POST',
+      signal: ctrl.signal,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ kind, input }),
+    });
+  } catch (err) {
+    if (err?.name === 'AbortError') throw timeoutError('本地解析逾時，請重試或改貼履歷 HTML / 純文字。');
+    throw err;
+  } finally {
+    clearTimeout(timer);
+  }
+  const json = await res.json();
+  if (!res.ok) return { ok: false, ...json };
+  return json;
+}
+
+async function callAiParse(kind, input, creds, localError) {
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), AI_PARSE_TIMEOUT_MS);
+  let res;
+  try {
+    res = await fetch('/api/ai-parse', {
+      method: 'POST',
+      signal: ctrl.signal,
+      headers: {
+        'Content-Type': 'application/json',
+        'x-provider-key': creds.key,
+      },
+      body: JSON.stringify({
+        provider: creds.provider,
+        kind,
+        input,
+        local_error: localError,
+      }),
+    });
+  } catch (err) {
+    if (err?.name === 'AbortError') throw timeoutError('AI 解析逾時，請重試或改貼履歷 HTML / 純文字。');
+    throw err;
+  } finally {
+    clearTimeout(timer);
+  }
   const json = await res.json();
   if (!res.ok) return { ok: false, ...json };
   return json;
@@ -625,7 +740,7 @@ async function runGaps(creds) {
 
     if (gapQuestions.length === 0) {
       state.phase = 'rendering';
-      await doRender(creds);
+      await polishThenRender(creds);
       return;
     }
 
@@ -635,13 +750,13 @@ async function runGaps(creds) {
     await askNextGap(creds);
   } catch {
     state.phase = 'rendering';
-    await doRender(creds);
+    await polishThenRender(creds);
   }
 }
 
 async function askNextGap(creds) {
   if (gapIdx >= gapQuestions.length || gapIdx >= 5) {
-    await doRender(creds);
+    await polishThenRender(creds);
     return;
   }
   const q = gapQuestions[gapIdx];
@@ -663,12 +778,60 @@ async function handleGapAnswer(text, creds) {
   if (gapIdx >= Math.min(gapQuestions.length, 5)) {
     state.answers = gapAnswers;
     state.phase = 'rendering';
-    addBubble('ai', '好的，讓我幫您生成預覽…');
-    state.messages.push({ role: 'assistant', content: '好的，讓我幫您生成預覽…' });
-    await doRender(creds);
+    addBubble('ai', '好的，我會先整合您的補充並潤飾履歷，再生成預覽…');
+    state.messages.push({ role: 'assistant', content: '好的，我會先整合您的補充並潤飾履歷，再生成預覽…' });
+    await polishThenRender(creds);
   } else {
     await askNextGap(creds);
   }
+}
+
+async function polishThenRender(creds) {
+  setStatus('AI 正在整合補答並潤飾履歷…');
+  setInputDisabled(true);
+  try {
+    const polished = await callPolish(creds);
+    if (polished.ok && polished.data) {
+      state.parsedData = polished.data;
+      state.answers = {};
+      state.polished = true;
+      addBubble('system', '已完成 AI 潤飾：摘要、經歷 bullet 與技能已重新整理。');
+    } else {
+      addBubble('system', `AI 潤飾未完成，改用原始解析結果：${polished.message_zh ?? '未知原因'}`);
+    }
+  } catch (err) {
+    addBubble('system', `AI 潤飾失敗，改用原始解析結果：${err.message ?? String(err)}`);
+  }
+  await doRender(creds);
+}
+
+async function callPolish(creds) {
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), POLISH_TIMEOUT_MS);
+  let res;
+  try {
+    res = await fetch('/api/polish', {
+      method: 'POST',
+      signal: ctrl.signal,
+      headers: {
+        'Content-Type': 'application/json',
+        'x-provider-key': creds.key,
+      },
+      body: JSON.stringify({
+        provider: creds.provider,
+        data: state.parsedData,
+        answers: Object.keys(state.answers ?? {}).length > 0 ? state.answers : null,
+      }),
+    });
+  } catch (err) {
+    if (err?.name === 'AbortError') throw timeoutError('AI 潤飾逾時，將使用原始解析結果。');
+    throw err;
+  } finally {
+    clearTimeout(timer);
+  }
+  const json = await res.json();
+  if (!res.ok) return { ok: false, ...json };
+  return json;
 }
 
 /* ─── Render ─────────────────────────────────────────────────────────────── */
@@ -724,6 +887,7 @@ async function doRender(creds, privacyDecision = null) {
 function showPreview(html) {
   previewPlaceholder.hidden = true;
   previewFrame.hidden = false;
+  previewFrame.setAttribute('sandbox', '');
   previewFrame.srcdoc = html;
 }
 
@@ -831,7 +995,8 @@ window.addEventListener('focus', () => {
       state = { ...loaded, sessionId: SESSION_ID };
       renderLog();
       if (state.renderedHtml) { showPreview(state.renderedHtml); showTemplateGallery(); downloadArea.hidden = false; }
-      $('multitab-banner').hidden = false;
+      multitabBanner.hidden = false;
+      saveState();
     }
   } catch {}
 });
@@ -839,6 +1004,21 @@ window.addEventListener('focus', () => {
 /* ─── Restore state on load ──────────────────────────────────────────────── */
 function restoreState() {
   loadState();
+  if (['parsing', 'rendering'].includes(state.phase)) {
+    const last = state.displayLog[state.displayLog.length - 1];
+    if (last && last.type === 'ai') last.interrupted = true;
+    state.phase = state.parsedData ? 'waiting-input' : 'waiting-input';
+    state.renderedHtml = null;
+    setStatus('');
+    setInputDisabled(false);
+    saveState();
+  }
+  if (state.phase === 'gaps' && (!state.parsedData || !state.gapsData)) {
+    state.phase = 'waiting-input';
+    setInputDisabled(false);
+    setStatus('');
+    saveState();
+  }
   if (state.displayLog.length > 0) {
     renderLog();
     const last = state.displayLog[state.displayLog.length - 1];

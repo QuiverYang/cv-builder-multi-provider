@@ -1,0 +1,82 @@
+[
+  {
+    "id": "modern-minimal",
+    "label": "Modern Minimal",
+    "description": "乾淨單欄履歷樣板"
+  },
+  {
+    "id": "colorful",
+    "label": "Colorful",
+    "description": "彩色重點式履歷樣板"
+  },
+  {
+    "id": "academic-serif",
+    "label": "Academic Serif",
+    "description": "學術與正式情境適用的襯線樣板"
+  },
+  {
+    "id": "ats-classic",
+    "label": "ATS Classic",
+    "description": "單欄、標準標題與低裝飾設計，適合投遞 ATS 系統"
+  },
+  {
+    "id": "executive-slate",
+    "label": "Executive Slate",
+    "description": "深色專業抬頭與強摘要區，適合資深與管理職履歷"
+  },
+  {
+    "id": "tech-sidebar",
+    "label": "Tech Sidebar",
+    "description": "技能側欄與時間軸經歷，適合軟體、產品與技術職"
+  },
+  {
+    "id": "studio-pop",
+    "label": "Studio Pop",
+    "description": "高彩度作品集風，適合設計、內容、行銷與創意職"
+  },
+  {
+    "id": "startup-sprint",
+    "label": "Startup Sprint",
+    "description": "活潑衝刺卡片風，適合新創、產品、PM 與成長職"
+  },
+  {
+    "id": "healthcare-calm",
+    "label": "Healthcare Calm",
+    "description": "清爽可信任的醫療照護風，適合醫療、照護、心理與生技"
+  },
+  {
+    "id": "hospitality-warm",
+    "label": "Hospitality Warm",
+    "description": "溫暖招待與服務業風格，適合餐旅、客服、活動與門市"
+  },
+  {
+    "id": "education-playbook",
+    "label": "Education Playbook",
+    "description": "像教案與筆記的親切版面，適合教育、培訓與顧問"
+  },
+  {
+    "id": "finance-signal",
+    "label": "Finance Signal",
+    "description": "明亮數據訊號風，適合金融、營運、分析與策略"
+  },
+  {
+    "id": "retail-bright",
+    "label": "Retail Bright",
+    "description": "醒目的商場陳列感，適合零售、業務、品牌與電商"
+  },
+  {
+    "id": "legal-cobalt",
+    "label": "Legal Cobalt",
+    "description": "專業但不沉悶的藍色法律顧問風，適合法務、顧問與公部門"
+  },
+  {
+    "id": "impact-earth",
+    "label": "Impact Earth",
+    "description": "自然永續與社會影響力風格，適合 ESG、非營利與研究"
+  },
+  {
+    "id": "maker-grid",
+    "label": "Maker Grid",
+    "description": "工業網格與標籤風，適合製造、工程、硬體與營造"
+  }
+]

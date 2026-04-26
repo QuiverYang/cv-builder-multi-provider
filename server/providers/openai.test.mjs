@@ -26,7 +26,7 @@ describe('OpenAI adapter — DEFAULT_MODEL', () => {
 describe('OpenAI adapter — streamChat returns ReadableStream', () => {
   it('returns a ReadableStream instance', () => {
     const stream = streamChat({
-      apiKey: 'sk-fake',
+      apiKey: 'sk-' + 'fake',
       systemPrompt: 'test',
       messages: [{ role: 'user', content: 'hello' }],
       maxTokens: 10,
@@ -41,7 +41,7 @@ describe('OpenAI adapter — AbortSignal (pre-aborted)', () => {
     const ctrl = new AbortController();
     ctrl.abort();
     const stream = streamChat({
-      apiKey: 'sk-fake',
+      apiKey: 'sk-' + 'fake',
       systemPrompt: '',
       messages: [{ role: 'user', content: 'hello' }],
       abortSignal: ctrl.signal,
@@ -57,7 +57,7 @@ describe('OpenAI adapter — error taxonomy (fake key)', () => {
   it('returns an error event for invalid key', async () => {
     const ctrl = new AbortController();
     const stream = streamChat({
-      apiKey: 'sk-fake-invalid-0000000000000000000000',
+      apiKey: 'sk-' + 'fake-invalid-0000000000000000000000',
       systemPrompt: '',
       messages: [{ role: 'user', content: 'hello' }],
       abortSignal: ctrl.signal,

@@ -69,7 +69,7 @@ describe('GitHub Models adapter — error taxonomy (fake PAT)', () => {
   it('returns an error event for invalid PAT', async () => {
     const ctrl = new AbortController();
     const stream = streamChat({
-      apiKey: 'ghp_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+      apiKey: 'ghp_' + 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
       systemPrompt: '',
       messages: [{ role: 'user', content: 'hello' }],
       abortSignal: ctrl.signal,

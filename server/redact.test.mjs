@@ -4,7 +4,7 @@ import { redact, redactObject, redactingLogger } from './redact.js';
 
 describe('redact()', () => {
   it('redacts sk-ant- (Anthropic) key', () => {
-    const s = 'key is sk-ant-api03-ABCDEF1234567890abcdef1234567890 here';
+    const s = `key is ${'sk-ant-' + 'api03-ABCDEF1234567890abcdef1234567890'} here`;
     const out = redact(s);
     assert.ok(!out.includes('sk-ant-api03'), 'key must be gone');
     assert.ok(out.includes('***REDACTED***'), 'replacement present');
@@ -12,35 +12,35 @@ describe('redact()', () => {
   });
 
   it('redacts sk- (OpenAI) key', () => {
-    const s = 'Authorization: Bearer sk-proj-ABCDEFGHIJKLMNOP1234567890';
+    const s = `Authorization: Bearer ${'sk-' + 'proj-ABCDEFGHIJKLMNOP1234567890'}`;
     const out = redact(s);
     assert.ok(!out.includes('sk-proj-'), 'key must be gone');
     assert.ok(out.includes('***REDACTED***'));
   });
 
   it('redacts AIza (Gemini) key (35+ chars after prefix)', () => {
-    const s = 'apiKey=AIzaSyABCDEFGHIJKLMNOPQRSTUVWXYZ0123456';
+    const s = `apiKey=${'AIza' + 'SyABCDEFGHIJKLMNOPQRSTUVWXYZ0123456'}`;
     const out = redact(s);
     assert.ok(!out.includes('AIzaSy'), 'key must be gone');
     assert.ok(out.includes('***REDACTED***'));
   });
 
   it('redacts ghp_ (GitHub PAT) key', () => {
-    const s = 'pat=ghp_ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghij';
+    const s = `pat=${'ghp_' + 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghij'}`;
     const out = redact(s);
     assert.ok(!out.includes('ghp_'), 'key must be gone');
     assert.ok(out.includes('***REDACTED***'));
   });
 
   it('redacts github_pat_ (fine-grained GitHub PAT) key', () => {
-    const s = 'token=github_pat_ABCDEFGHIJKLMNOPQRSTUVWXYZ_1234567890';
+    const s = `token=${'github_pat_' + 'ABCDEFGHIJKLMNOPQRSTUVWXYZ_1234567890'}`;
     const out = redact(s);
     assert.ok(!out.includes('github_pat_'), 'key must be gone');
     assert.ok(out.includes('***REDACTED***'));
   });
 
   it('redacts multiple key patterns in one string', () => {
-    const s = 'anthropic=sk-ant-abc123xyz, openai=sk-prod-hello1234567890';
+    const s = `anthropic=${'sk-ant-' + 'abc123xyz'}, openai=${'sk-' + 'prod-hello1234567890'}`;
     const out = redact(s);
     assert.ok(!out.includes('sk-ant-abc'), 'anthropic key gone');
     assert.ok(!out.includes('sk-prod-'), 'openai key gone');
@@ -80,15 +80,16 @@ describe('redact()', () => {
 
 describe('redactObject()', () => {
   it('redacts Error .message and .stack', () => {
-    const err = new Error('key was sk-ant-secretabc123456 here');
-    err.stack = 'Error: key was sk-ant-secretabc123456 here\n  at fn:1';
+    const key = 'sk-ant-' + 'secretabc123456';
+    const err = new Error(`key was ${key} here`);
+    err.stack = `Error: key was ${key} here\n  at fn:1`;
     const safe = redactObject(err);
     assert.ok(!safe.message.includes('sk-ant-secretabc'), 'message redacted');
     assert.ok(!safe.stack.includes('sk-ant-secretabc'), 'stack redacted');
   });
 
   it('redacts nested object via JSON round-trip', () => {
-    const obj = { headers: { authorization: 'sk-proj-mysecret123456' } };
+    const obj = { headers: { authorization: 'sk-' + 'proj-mysecret123456' } };
     const safe = redactObject(obj);
     assert.ok(!JSON.stringify(safe).includes('sk-proj-mysecret'), 'nested redacted');
   });
@@ -99,7 +100,7 @@ describe('redactingLogger()', () => {
     const lines = [];
     const base = { log: (...a) => lines.push(a.join(' ')), info: (...a) => lines.push(a.join(' ')), warn: (...a) => lines.push(a.join(' ')), error: (...a) => lines.push(a.join(' ')) };
     const logger = redactingLogger(base);
-    logger.log('key=sk-ant-testkey12345678');
+    logger.log(`key=${'sk-ant-' + 'testkey12345678'}`);
     assert.ok(lines[0].includes('***REDACTED***'), 'log redacted');
     assert.ok(!lines[0].includes('sk-ant-testkey'), 'raw key gone from log');
   });

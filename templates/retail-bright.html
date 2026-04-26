@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Resume</title>
+<style>
+  :root { --ink:#22182f; --muted:#6b5f7a; --mag:#db2777; --violet:#7c3aed; --yellow:#fde047; --sky:#38bdf8; }
+  * { box-sizing:border-box; }
+  body { margin:0; padding:30px; background:linear-gradient(135deg, #fdf2f8, #eef2ff); color:var(--ink); font-family:"Montserrat", "PingFang TC", "Microsoft JhengHei", sans-serif; font-size:13.5px; line-height:1.58; word-break:break-word; overflow-wrap:anywhere; }
+  .page { max-width:960px; margin:0 auto; background:#fff; border-radius:28px; overflow:hidden; box-shadow:0 26px 70px rgba(124,58,237,.18); }
+  .hero { padding:38px 42px; background:linear-gradient(120deg, var(--mag), var(--violet)); color:#fff; position:relative; }
+  .hero::after { content:"SALE"; position:absolute; right:34px; top:30px; padding:8px 12px; background:var(--yellow); color:#22182f; border-radius:999px; font-size:12px; font-weight:950; letter-spacing:.14em; transform:rotate(8deg); }
+  h1.name { margin:0 0 8px; font-size:38px; letter-spacing:-.05em; }
+  .headline { margin:0 0 12px; color:#fef3c7; font-weight:900; }
+  .contact { margin:0; color:#fce7f3; font-size:12px; max-width:760px; }
+  .contact a { color:#fff; font-weight:800; text-decoration:none; }
+  .layout { display:grid; grid-template-columns:285px 1fr; }
+  aside { padding:30px 26px; background:#faf5ff; }
+  main { padding:34px 38px; }
+  section.sec { margin:0 0 24px; }
+  section.sec h2 { margin:0 0 12px; color:var(--violet); font-size:13px; letter-spacing:.15em; text-transform:uppercase; }
+  section.sec h2::after { content:""; display:block; width:58px; height:6px; background:linear-gradient(90deg,var(--mag),var(--yellow),var(--sky)); border-radius:999px; margin-top:6px; }
+  .exp { margin:0 0 18px; padding:16px; background:#fff; border:1px solid #f5d0fe; border-radius:18px; box-shadow:0 8px 20px rgba(219,39,119,.08); break-inside:avoid; }
+  .exp-head { display:flex; flex-wrap:wrap; gap:4px 8px; align-items:baseline; }
+  .exp-title { font-weight:950; color:var(--mag); }
+  .exp-company { font-weight:850; color:var(--violet); }
+  .exp-date { margin-left:auto; background:#fef08a; color:#713f12; padding:2px 8px; border-radius:999px; font-size:11px; font-weight:900; }
+  .exp-sep,.loc,.edu-degree,.edu-date { color:var(--muted); }
+  ul.bullets { margin:8px 0 0; padding-left:18px; }
+  li::marker { color:var(--mag); }
+  .edu { margin-bottom:10px; }
+  .edu-school { font-weight:900; }
+  .skills-wrap { display:flex; flex-wrap:wrap; gap:7px; }
+  .skill { display:inline-block; padding:5px 10px; background:#fce7f3; color:#be185d; border-radius:999px; font-size:12px; font-weight:900; }
+  aside .skill { background:#ede9fe; color:#6d28d9; }
+  ul { margin:0; padding-left:18px; }
+  @media print { body{background:#fff;padding:0}.page{box-shadow:none;border-radius:0}.hero::after{display:none}.exp,section.sec{break-inside:avoid} }
+  @media (max-width:760px){ .layout{grid-template-columns:1fr}.hero::after{display:none} }
+</style>
+</head>
+<body>
+{{TODOS}}
+<div class="page">
+  <header class="hero">{{HEADER}}</header>
+  <div class="layout"><aside>{{SIDEBAR_SECTIONS}}</aside><main>{{MAIN_SECTIONS}}</main></div>
+</div>
+</body>
+</html>

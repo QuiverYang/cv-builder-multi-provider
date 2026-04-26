@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Resume</title>
+<style>
+  :root { --ink:#12343b; --muted:#5e7c83; --mint:#4ecdc4; --teal:#0f766e; --lav:#ede9fe; --paper:#fbfffe; --line:#d6f3ef; }
+  * { box-sizing:border-box; }
+  body { margin:0; padding:30px; background:linear-gradient(160deg, #e0f7f4, #f5f3ff); color:var(--ink); font-family:"Nunito", "PingFang TC", "Microsoft JhengHei", sans-serif; font-size:13.8px; line-height:1.65; word-break:break-word; overflow-wrap:anywhere; }
+  .page { max-width:940px; margin:0 auto; background:var(--paper); border-radius:30px; overflow:hidden; box-shadow:0 24px 70px rgba(15,118,110,.16); }
+  .masthead { padding:34px 40px 28px; background:linear-gradient(135deg, #ccfbf1, #ede9fe); border-bottom:1px solid var(--line); position:relative; }
+  .masthead::after { content:"+"; position:absolute; right:36px; top:22px; color:#fff; background:var(--teal); width:42px; height:42px; border-radius:14px; display:grid; place-items:center; font-size:30px; font-weight:900; }
+  .layout { display:grid; grid-template-columns:270px 1fr; }
+  aside { padding:30px 26px; background:#f0fdfa; border-right:1px solid var(--line); }
+  main { padding:32px 38px; }
+  h1.name { margin:0 0 8px; font-size:34px; letter-spacing:-.03em; }
+  .headline { margin:0 0 12px; color:var(--teal); font-weight:900; }
+  .contact { margin:0; color:var(--muted); font-size:12px; max-width:760px; }
+  .contact a { color:var(--teal); text-decoration:none; font-weight:800; }
+  section.sec { margin:0 0 24px; }
+  section.sec h2 { margin:0 0 12px; color:var(--teal); font-size:13px; letter-spacing:.13em; text-transform:uppercase; }
+  section.sec h2::after { content:""; display:block; width:46px; height:4px; background:var(--mint); border-radius:999px; margin-top:5px; }
+  .exp { margin:0 0 18px; padding:16px; background:#fff; border:1px solid var(--line); border-radius:18px; break-inside:avoid; }
+  .exp-head { display:flex; flex-wrap:wrap; gap:4px 8px; align-items:baseline; }
+  .exp-title { font-weight:900; color:#0f766e; }
+  .exp-company { font-weight:800; }
+  .exp-date { margin-left:auto; color:#6d28d9; font-size:12px; font-weight:800; }
+  .exp-sep,.loc,.edu-degree,.edu-date { color:var(--muted); }
+  ul.bullets { margin:8px 0 0; padding-left:18px; }
+  li::marker { color:var(--mint); }
+  .edu { margin-bottom:10px; }
+  .edu-school { font-weight:900; }
+  .skills-wrap { display:flex; flex-wrap:wrap; gap:7px; }
+  .skill { display:inline-block; padding:5px 10px; background:#ccfbf1; color:#0f766e; border-radius:999px; font-size:12px; font-weight:900; }
+  aside .skill { background:#ede9fe; color:#5b21b6; }
+  ul { margin:0; padding-left:18px; }
+  @media print { body{background:#fff;padding:0}.page{box-shadow:none;border-radius:0}.exp,section.sec{break-inside:avoid} }
+  @media (max-width:760px){ .layout{grid-template-columns:1fr}.masthead::after{display:none} }
+</style>
+</head>
+<body>
+{{TODOS}}
+<div class="page">
+  <header class="masthead">{{HEADER}}</header>
+  <div class="layout"><aside>{{SIDEBAR_SECTIONS}}</aside><main>{{MAIN_SECTIONS}}</main></div>
+</div>
+</body>
+</html>

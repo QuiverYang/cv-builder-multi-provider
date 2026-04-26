@@ -32,8 +32,8 @@ npm start           # 預設 http://127.0.0.1:5173
 ### Google Gemini
 
 - **取得 API Key**: [Google AI Studio](https://aistudio.google.com/apikey)
-- **Key 格式**: `AIzaSy...`
-- **預設 model**: `gemini-2.0-flash`
+- **Key 格式**: `AIzaSy...` 或 `AQ...`
+- **預設 model**: `gemini-2.5-flash`
 - **環境變數 override**: `GEMINI_MODEL`
 - **免費額度**: 有（每日免費 quota，詳見 [AI Studio 定價](https://ai.google.dev/pricing)）
 

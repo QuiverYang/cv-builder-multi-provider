@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Resume</title>
+<style>
+  :root { --ink:#171321; --muted:#685f78; --pink:#ff4fa3; --orange:#ff8a3d; --cyan:#25c7d9; --paper:#fffaf3; }
+  * { box-sizing:border-box; }
+  body { margin:0; padding:30px; background:radial-gradient(circle at 15% 10%, #ffe061 0 16%, transparent 17%), radial-gradient(circle at 90% 0, #8ee8ff 0 18%, transparent 19%), #25133d; color:var(--ink); font-family:"Avenir Next", "PingFang TC", "Microsoft JhengHei", sans-serif; font-size:13.5px; line-height:1.58; word-break:break-word; overflow-wrap:anywhere; }
+  .page { max-width:960px; margin:0 auto; display:grid; grid-template-columns:285px 1fr; background:var(--paper); border:5px solid #171321; border-radius:26px; overflow:hidden; box-shadow:14px 14px 0 #ff4fa3; }
+  aside { background:#171321; color:#fffaf3; padding:36px 26px; }
+  main { padding:38px; background:linear-gradient(180deg, #fffaf3, #fff); }
+  .masthead { background:#fffaf3; color:#171321; padding:18px; border:3px solid #171321; border-radius:18px; box-shadow:8px 8px 0 var(--cyan); margin-bottom:22px; }
+  h1.name { margin:0 0 6px; font-size:33px; line-height:1; letter-spacing:-.05em; }
+  .headline { margin:0 0 10px; color:var(--pink); font-weight:900; }
+  .contact { margin:0; color:#463b58; font-size:12px; line-height:1.7; }
+  .contact a { color:#0b8b99; text-decoration:none; font-weight:800; }
+  section.sec { margin:0 0 24px; }
+  section.sec h2 { display:inline-block; margin:0 0 12px; padding:5px 10px; background:var(--orange); color:#171321; border:2px solid #171321; border-radius:999px; font-size:12px; letter-spacing:.1em; text-transform:uppercase; box-shadow:4px 4px 0 var(--cyan); }
+  main section.sec h2 { background:#ffe061; }
+  aside section.sec h2 { background:var(--pink); color:#fff; box-shadow:4px 4px 0 var(--orange); }
+  .exp { margin:0 0 20px; padding:16px; background:#fff; border:2px solid #171321; border-radius:16px; box-shadow:6px 6px 0 #ffe061; break-inside:avoid; }
+  .exp-head { display:flex; flex-wrap:wrap; gap:4px 8px; align-items:baseline; }
+  .exp-title { font-weight:950; color:#171321; }
+  .exp-company { color:#d72d83; font-weight:800; }
+  .exp-date { margin-left:auto; color:#171321; background:#8ee8ff; padding:2px 8px; border-radius:999px; font-size:11px; font-weight:900; }
+  .exp-sep,.loc,.edu-degree,.edu-date { color:var(--muted); }
+  ul.bullets { margin:8px 0 0; padding-left:18px; }
+  li::marker { color:var(--pink); }
+  .edu { margin-bottom:10px; padding-bottom:8px; border-bottom:2px dashed #ffd0e7; }
+  .edu-school { font-weight:900; }
+  .skills-wrap { display:flex; flex-wrap:wrap; gap:7px; }
+  .skill { display:inline-block; padding:5px 10px; background:#25c7d9; color:#171321; border-radius:999px; font-size:12px; font-weight:900; }
+  aside .skill { background:#ffe061; }
+  ul { margin:0; padding-left:18px; }
+  @media print { body{background:#fff;padding:0}.page{box-shadow:none;border-radius:0}.exp,section.sec{break-inside:avoid} }
+  @media (max-width:760px){ .page{grid-template-columns:1fr} }
+</style>
+</head>
+<body>
+{{TODOS}}
+<div class="page">
+  <aside><div class="masthead">{{HEADER}}</div>{{SIDEBAR_SECTIONS}}</aside>
+  <main>{{MAIN_SECTIONS}}</main>
+</div>
+</body>
+</html>

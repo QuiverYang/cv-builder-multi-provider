@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Resume</title>
+<style>
+  :root { --ink:#2b2118; --muted:#7b6653; --cream:#fff7ed; --terracotta:#c2410c; --gold:#f6b73c; --sage:#7c9b76; }
+  * { box-sizing:border-box; }
+  body { margin:0; padding:30px; background:linear-gradient(135deg, #ffe7c2, #fef3c7); color:var(--ink); font-family:"Gill Sans", "PingFang TC", "Microsoft JhengHei", sans-serif; font-size:13.7px; line-height:1.62; word-break:break-word; overflow-wrap:anywhere; }
+  .page { max-width:930px; margin:0 auto; background:var(--cream); border-radius:34px; overflow:hidden; box-shadow:0 24px 65px rgba(124,69,23,.22); border:1px solid #fed7aa; }
+  .top { padding:38px 42px; background:linear-gradient(135deg, #431407, #9a3412); color:#fff7ed; }
+  h1.name { margin:0; font-size:38px; letter-spacing:-.04em; }
+  .headline { margin:8px 0 12px; color:#fed7aa; font-weight:800; }
+  .contact { margin:0; font-size:12px; color:#ffedd5; }
+  .contact a { color:#fde68a; text-decoration:none; font-weight:800; }
+  .body { display:grid; grid-template-columns:285px 1fr; }
+  aside { padding:30px 26px; background:#fff1dc; }
+  main { padding:34px 38px; }
+  section.sec { margin:0 0 24px; }
+  section.sec h2 { margin:0 0 12px; color:var(--terracotta); font-size:13px; letter-spacing:.12em; text-transform:uppercase; }
+  section.sec h2::before { content:""; display:inline-block; width:12px; height:12px; margin-right:8px; background:var(--gold); border-radius:50% 50% 50% 0; transform:rotate(-45deg); }
+  .exp { margin:0 0 18px; padding:16px 18px; background:#fffaf3; border-radius:18px; border:1px solid #fed7aa; break-inside:avoid; }
+  .exp-head { display:flex; flex-wrap:wrap; gap:4px 8px; align-items:baseline; }
+  .exp-title { font-weight:950; color:#9a3412; }
+  .exp-company { font-weight:800; color:#4d7c0f; }
+  .exp-date { margin-left:auto; background:#fef3c7; color:#92400e; padding:2px 8px; border-radius:999px; font-size:11px; font-weight:900; }
+  .exp-sep,.loc,.edu-degree,.edu-date { color:var(--muted); }
+  ul.bullets { margin:8px 0 0; padding-left:18px; }
+  li::marker { color:var(--terracotta); }
+  .edu { margin-bottom:10px; }
+  .edu-school { font-weight:900; }
+  .skills-wrap { display:flex; flex-wrap:wrap; gap:7px; }
+  .skill { display:inline-block; padding:5px 10px; background:#ffedd5; color:#9a3412; border:1px solid #fed7aa; border-radius:999px; font-size:12px; font-weight:850; }
+  aside .skill { background:#ecfccb; color:#4d7c0f; border-color:#bef264; }
+  ul { margin:0; padding-left:18px; }
+  @media print { body{background:#fff;padding:0}.page{box-shadow:none;border-radius:0}.exp,section.sec{break-inside:avoid} }
+  @media (max-width:760px){ .body{grid-template-columns:1fr} }
+</style>
+</head>
+<body>
+{{TODOS}}
+<div class="page">
+  <header class="top">{{HEADER}}</header>
+  <div class="body"><aside>{{SIDEBAR_SECTIONS}}</aside><main>{{MAIN_SECTIONS}}</main></div>
+</div>
+</body>
+</html>
