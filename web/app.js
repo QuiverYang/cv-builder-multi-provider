@@ -231,6 +231,24 @@ let state = {
   phase: 'idle',
 };
 
+function resetConversationState() {
+  const template = state.currentTemplate || 'modern-minimal';
+  state = {
+    version: KEY_STATE,
+    sessionId: SESSION_ID,
+    messages: [],
+    displayLog: [],
+    parsedData: null,
+    gapsData: null,
+    answers: {},
+    currentTemplate: template,
+    renderedHtml: null,
+    renderedFilename: null,
+    polished: false,
+    phase: 'idle',
+  };
+}
+
 function saveState() {
   const persisted = { ...state, renderedHtml: null };
   storageSet(KEY_STATE, JSON.stringify(persisted));
@@ -280,6 +298,28 @@ $('theme-toggle').addEventListener('click', () => {
 
 $('storage-banner-close').addEventListener('click', () => { storageBanner.hidden = true; });
 $('multitab-banner-close').addEventListener('click', () => { multitabBanner.hidden = true; });
+
+$('clear-chat').addEventListener('click', async () => {
+  if (!confirm('要清除目前的對話紀錄與履歷流程資料嗎？')) return;
+  if (_currentAbortCtrl) {
+    _currentAbortCtrl.abort();
+    if (_currentReader) {
+      try { await _currentReader.cancel(); } catch {}
+      _currentReader = null;
+    }
+    _currentAbortCtrl = null;
+  }
+  resetConversationState();
+  renderLog();
+  setStatus('');
+  setInputDisabled(false);
+  chatInput.value = '';
+  inputHistory = [];
+  historyIdx = -1;
+  saveState();
+  greetIfNeeded();
+  await showSamplePreviewIfNeeded();
+});
 
 /* ─── Onboarding Modal (2-step) ──────────────────────────────────────────── */
 let selectedProvider = null;
